@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import MemoryTab from "./tabs/MemoryTab";
 import ProjectsTab from "./tabs/ProjectsTab";
 import TransferTab from "./tabs/TransferTab";
@@ -13,93 +12,79 @@ import {
 
 type Tab = "memory" | "projects" | "transfer" | "settings";
 
+const TABS: { id: Tab; icon: typeof IconCloudComputing; label: string }[] = [
+  { id: "memory",   icon: IconCloudComputing, label: "Memory"   },
+  { id: "projects", icon: IconFolder,         label: "Projects" },
+  { id: "transfer", icon: IconDownload,       label: "Transfer" },
+  { id: "settings", icon: IconSettings,       label: "Settings" },
+];
+
 export default function Sidebar() {
   const [tab, setTab] = useState<Tab>("memory");
 
   return (
-    <div>
-      <div
-        style={{
-          display: "flex",
-          gap: 20,
-          marginBottom: 16,
-         
-          backdropFilter: "blur(20px)",
-          borderBottom: "1px solid rgba(255,255,255,0.5)",
-          paddingBottom: 8,
-         
-        }}
-      >
-        <button
-          onClick={() => setTab("memory")}
-            style={{
+    <div style={{
+      height: "100%",
+      display: "flex",
+      flexDirection: "column",
+      fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+    }}>
+      {/* Tab bar */}
+      <div style={{
+        display: "flex",
+        gap: "4px",
+        marginBottom: "16px",
+        background: "rgba(255,255,255,0.45)",
+        borderRadius: "14px",
+        padding: "4px",
+        border: "1px solid rgba(255,255,255,0.7)",
+        backdropFilter: "blur(8px)",
+      }}>
+        {TABS.map(({ id, icon: Icon, label }) => {
+          const active = tab === id;
+          return (
+            <button
+              key={id}
+              onClick={() => setTab(id)}
+              title={label}
+              style={{
+                flex: 1,
                 display: "flex",
                 alignItems: "center",
-                width: 32,
-                height: 32,
                 justifyContent: "center",
-            }}
-        >
-          <IconCloudComputing
-            stroke={2}
-            style={{
-              color: tab === "memory" ? "#CB2957" : "#888",
-            }}
-          />
-        </button>
-
-        <button onClick={() => setTab("projects")} style={{
-            display: "flex",
-            alignItems: "center",
-            width: 32,
-            height: 32,
-            justifyContent: "center",
-        }}
-        
-        >
-          <IconFolder
-            stroke={2}
-            style={{
-              color: tab === "projects" ? "#CB2957" : "#888",
-            }}
-          />
-        </button>
-
-        <button onClick={() => setTab("transfer")} style={{
-            display: "flex",
-            alignItems: "center",
-            width: 32,
-            height: 32,
-            justifyContent: "center",
-        }}>
-          <IconDownload
-            stroke={2}
-            style={{
-              color: tab === "transfer" ? "#CB2957" : "#888",
-            }}
-          />
-        </button>
-
-        <button onClick={() => setTab("settings")} style={{
-            display: "flex",
-            alignItems: "center",
-            width: 32,
-            height: 32,
-            justifyContent: "center",
-        }}>
-          <IconSettings
-            stroke={2}
-            style={{
-              color: tab === "settings" ? "#CB2957" : "#888",
-            }}
-          />
-        </button>
+                height: "34px",
+                borderRadius: "10px",
+                border: "none",
+                background: active
+                  ? "rgba(255,255,255,0.9)"
+                  : "transparent",
+                boxShadow: active
+                  ? "0 1px 4px rgba(0,0,0,0.10)"
+                  : "none",
+                cursor: "pointer",
+                transition: "all 0.15s ease",
+              }}
+            >
+              <Icon
+                size={17}
+                stroke={2}
+                style={{
+                  color: active ? "#CB2957" : "#9CA3AF",
+                  transition: "color 0.15s ease",
+                }}
+              />
+            </button>
+          );
+        })}
       </div>
 
-      {tab === "memory" && <MemoryTab />}
-      {tab === "projects" && <ProjectsTab />}
-      {tab === "transfer" && <TransferTab />}
-      {tab === "settings" && <SettingsTab />}
+      {/* Content */}
+      <div style={{ flex: 1, minHeight: 0 }}>
+        {tab === "memory"   && <MemoryTab />}
+        {tab === "projects" && <ProjectsTab />}
+        {tab === "transfer" && <TransferTab />}
+        {tab === "settings" && <SettingsTab />}
+      </div>
     </div>
   );
 }

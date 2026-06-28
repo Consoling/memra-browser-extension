@@ -7,11 +7,16 @@ export function startPromptCapture() {
     const editor = document.querySelector(
       '[contenteditable="true"]',
     ) as HTMLDivElement | null;
+let lastPrompt = "";
+
 
     const prompt = editor?.innerText.trim();
 
     if (!prompt) return;
+if (prompt === lastPrompt)
+  return;
 
+lastPrompt = prompt;
     await saveMemory({
       id: crypto.randomUUID(),
       role: "user",

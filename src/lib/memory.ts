@@ -8,6 +8,8 @@ export type Memory = {
   source: "chatgpt";
 
   createdAt: number;
+
+  conversationId?: string;
 };
 
 
